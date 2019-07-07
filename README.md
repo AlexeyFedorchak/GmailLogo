@@ -3,3 +3,4 @@ Library for dynamically creating user logos on PHP, based on Laravel. This lib m
 
 How to use:
 
+composer require gmail-logo/generator
