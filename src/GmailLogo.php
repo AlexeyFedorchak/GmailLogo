@@ -1,5 +1,5 @@
 <?php
-namespace App\Logo;
+namespace OleksiiFedorchak\Gmail;
 
 use App\User;
 use Illuminate\Support\Facades\Storage;

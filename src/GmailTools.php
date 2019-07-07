@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logo;
+namespace OleksiiFedorchak\Gmail;
 
 use App\User;
 

@@ -16,5 +16,10 @@
             "type": "vcs",
             "url": "https://github.com/OleksiiFedorchak/GmailLogo"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "OleksiiFedorchak\\Gmail\\": "src/"
+        }
+    },
 }
