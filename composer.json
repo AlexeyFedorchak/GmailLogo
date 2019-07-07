@@ -14,5 +14,8 @@
             "type": "vcs",
             "url": "https://github.com/OleksiiFedorchak/GmailLogo"
         }
-    ]
+    ],
+    "require": {
+        "php": "^7.0",
+    }
 }
