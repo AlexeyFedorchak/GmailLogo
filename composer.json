@@ -8,14 +8,13 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "php": "^7.0"
+    },
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/OleksiiFedorchak/GmailLogo"
         }
     ],
-    "require": {
-        "php": "^7.0"
-    }
 }
