@@ -7,7 +7,7 @@
             "email": "ofedorchak68@gmail.com"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "require": {},
     "repositories": [
         {
