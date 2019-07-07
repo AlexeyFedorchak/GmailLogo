@@ -1,0 +1,11 @@
+{
+  "require": {
+    "OleksiiFedorchak/GmailLogo": "master"
+  },
+  "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/OleksiiFedorchak/GmailLogo.git"
+        }
+  ],
+}
