@@ -8,5 +8,11 @@
         }
     ],
     "minimum-stability": "beta",
-    "require": {}
+    "require": {},
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/OleksiiFedorchak/GmailLogo"
+        }
+    ]
 }
