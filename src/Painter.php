@@ -15,7 +15,7 @@ class Painter
     /**
      * generate typical gmail logo..
      */
-    public function typical()
+    public function showTypicalPNG()
     {
         $temporaryLogo = new Generator('John Doe', [75, 175], Font::ROBOTO_REGULAR);
         $temporaryLogo->setHeader()
@@ -23,7 +23,7 @@ class Painter
             ->setTextColor(255,255,255)
             ->setTextSize(110)
             ->createPNG()
-            ->save()
+            ->showPNG()
             ->destroy();
     }
 }

@@ -280,6 +280,7 @@ class Generator
 
         return $this;
     }
+
     /**
      * destroy image to prevent dump overloading
      *
