@@ -24,8 +24,7 @@ class Painter
             ->setBackground(300,300)
             ->setTextColor(255,255,255)
             ->setTextSize(110)
-            ->createPNG()
-            ->showPNG()
-            ->destroy();
+            ->png()
+            ->get();
     }
 }

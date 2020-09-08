@@ -232,7 +232,7 @@ class Generator
      *
      * @return $this
      */
-    public function createPNG()
+    public function png()
     {
         $this->logoName .= '.png';
 
@@ -248,7 +248,7 @@ class Generator
      *
      * @return $this
      */
-    public function createJPEG()
+    public function jpeg()
     {
         $this->logoName .= '.jpeg';
 
@@ -260,25 +260,15 @@ class Generator
     }
 
     /**
-     * helper for checking output PNG
+     * show image and clear memory
      *
-     * @return $this
+     * @return string
      */
-    public function showPNG()
+    public function get()
     {
-        imagepng($this->imageResource);
-        return $this;
-    }
+        $this->destroy();
 
-    /**
-     * helper for checking output JPEG
-     *
-     * @return $this
-     */
-    public function showJPEG()
-    {
-        imagejpeg($this->imageResource);
-        return $this;
+        return $this->imageContent;
     }
 
     /**
