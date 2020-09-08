@@ -27,6 +27,7 @@ class Painter
 
         return $temporaryLogo->setHeader()
             ->setBackground(300,300)
+            ->setRandomBackgroundColor()
             ->setTextColor(255,255,255)
             ->setTextSize(110)
             ->png()
