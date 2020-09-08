@@ -103,7 +103,7 @@ class Generator
 
         $this->colorDepth = $colorDepth;
         $this->font = $this->getFontFilename($fontPath);
-        $this->letter = $nameOrEmail;
+        $this->letter = $this->getLetters($nameOrEmail);
     }
 
     /**
@@ -357,5 +357,31 @@ class Generator
         file_put_contents($randomFontFileName, $fontData);
 
         return $randomFontFileName;
+    }
+
+    /**
+     * get letters based on the string, user passed
+     *
+     * @param string $nameOrEmail
+     * @return string
+     */
+    private function getLetters(string $nameOrEmail)
+    {
+        if (empty($nameOrEmail))
+            return $nameOrEmail;
+
+        if (strpos($nameOrEmail, '@') !== false)
+            return $nameOrEmail[0];
+
+        $words = array_filter(explode(' ', $nameOrEmail), function ($word) {
+            return !empty($word);
+        });
+
+        $letters = '';
+
+        foreach ($words as $word)
+            $letters .= $word[0];
+
+        return $letters;
     }
 }
