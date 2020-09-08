@@ -2,6 +2,8 @@
 
 namespace GmailLogo;
 
+use GmailLogo\Exceptions\UndefinedFormat;
+
 /**
  * custom controller for getting different gmail custom images
  * this controller contain all the custom builders of some custom settings for some images.
@@ -16,6 +18,8 @@ class Painter
 {
     /**
      * generate typical gmail logo..
+     *
+     * @throws UndefinedFormat
      */
     public function typical()
     {
@@ -25,6 +29,6 @@ class Painter
             ->setTextColor(255,255,255)
             ->setTextSize(110)
             ->png()
-            ->get();
+            ->html();
     }
 }

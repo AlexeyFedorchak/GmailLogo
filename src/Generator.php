@@ -2,6 +2,8 @@
 
 namespace GmailLogo;
 
+use GmailLogo\Exceptions\UndefinedFormat;
+
 /**
  * custom utilities for generating gmail logo
  *
@@ -264,11 +266,32 @@ class Generator
      *
      * @return string
      */
-    public function get()
+    public function raw()
     {
         $this->destroy();
 
         return $this->imageContent;
+    }
+
+    /**
+     * generate html output based on the images data
+     *
+     * @return string
+     * @throws UndefinedFormat
+     */
+    public function html()
+    {
+        $this->destroy();
+
+        if (strpos($this->logoName, 'jpeg') !== false)
+            return '<img src="data:image/jpeg;base64,' . base64_encode($this->imageContent) . '" />';
+
+        if (strpos($this->logoName, 'png') !== false)
+            return '<img src="data:image/png;base64,' . base64_encode($this->imageContent) . '" />';
+
+        throw new UndefinedFormat(
+            'Module supports only JPEG and PNG! Hint: use png(), jpeg() above.'
+        );
     }
 
     /**
