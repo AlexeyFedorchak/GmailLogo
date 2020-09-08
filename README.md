@@ -1,17 +1,56 @@
 # GmailLogo
 Library for dynamically creating user logos on PHP, based on Laravel. This lib may be used with another framework or event without, just change input class type from Laravel Model App\User to another. You event may not use models at all, simpty give the text that should be putted into the image.
-
-How to use:
-
+<br/>
+**Installation**:<br/>
+```
 composer require gmail-logo/generator
+```
+<br/>
+<br/>
 
-Now this version is not properly set for installation, so you should do it yourself. Please set autoload, providers and another things... or create your custom classes in App namespace with code of classes in src folder.
+**Usage**:<br/>
+<br/>
+Lib has two main classes: Generator.php and Painter.php.
+Painter is using methods of generators to generate custom images with color and text you like.
 
-Class GmailLogo is processing generating the image for user
-Class GmailTools is building special image you would like to generate. You may simpty use already created funtion createGmailLogo.
+Also Painter contains first example of generating gmail logo: method typical().
+Using this method you may just generate typical gmail logo. 
+You just need to do so:
+```
+echo (new \GmailLogo\Painter())->typical();
+```
 
-so if you have model App\User and this model has at least one attribute where it is possible to save the path to logo (you may set the name of this attribute in class GmailLogo), simpty write:
+This will output <img /> with necessary image.
 
-GmailTools::createGmailLogo($user);
+If you need to generate some custom images, you may create new class which will extend Painter
+and you code may look like this:
 
-$user - is the variable that contains your user data.
+```
+class CustomPainter extends \GmailLogo\Painter
+{
+    public function customImage()
+    {
+    }
+}
+
+echo (new CustomPainter())->customImage();
+```
+
+
+That is!!
+<br/>
+<br/>
+<br/>
+Using this package you can do things like this:
+```
+        $temporaryLogo = new Generator('John Doe', [75, 175], Font::ROBOTO_REGULAR);
+
+        return $temporaryLogo
+            ->setSizes(300,300)
+            ->setRandomBackgroundColor()
+            ->setTextColor(255,255,255)
+            ->setTextSize(110)
+            ->png()
+            ->html();
+```
+This will create typical gmail logo for John Doe :D

@@ -7,6 +7,9 @@
             "email": "ofedorchak68@gmail.com"
         }
     ],
+    "require": {
+        "php": "^7.2.5"
+    },
     "license": "MIT",
     "minimum-stability": "stable",
     "repositories": [
