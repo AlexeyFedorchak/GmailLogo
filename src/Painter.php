@@ -24,7 +24,8 @@ class Painter
     public function typical()
     {
         $temporaryLogo = new Generator('John Doe', [75, 175], Font::ROBOTO_REGULAR);
-        $temporaryLogo->setHeader()
+
+        return $temporaryLogo->setHeader()
             ->setBackground(300,300)
             ->setTextColor(255,255,255)
             ->setTextSize(110)
