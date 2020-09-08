@@ -92,6 +92,7 @@ class Generator
      *
      * LogoGmail constructor.
      * @param string $nameOrEmail
+     * @param string $fontPath
      * @param array $colorDepth
      */
     public function __construct(string $nameOrEmail, array $colorDepth, string $fontPath)
@@ -99,7 +100,7 @@ class Generator
         $this->logoName = md5(uniqid($nameOrEmail));
 
         $this->colorDepth = $colorDepth;
-        $this->font = $fontPath;
+        $this->font = $this->getFontFilename($fontPath);
         $this->letter = $nameOrEmail;
     }
 
@@ -181,6 +182,20 @@ class Generator
     }
 
     /**
+     * set custom font path
+     * be carefully with that function, you cannot pass here links. File should be on your server and be readable,
+     * it should be .ttf
+     *
+     * @param string $fontPath
+     * @return $this
+     */
+    public function setFontFile(string $fontPath)
+    {
+        $this->font = $fontPath;
+        return $this;
+    }
+
+    /**
      * use text for image
      *
      * @param $size int
@@ -189,8 +204,10 @@ class Generator
      */
     public function setTextSize(int $size, int $angle = 0)
     {
+        $font = './' . $this->font;
+
     	//centering text
-        $bbox = imagettfbbox($size, 0, $this->font, $this->letter);
+        $bbox = imagettfbbox($size, 0, $font, $this->letter);
         $textHeight = abs($bbox[5]);
         $textWidth = $bbox[4] - $bbox[0];
         $y = $textHeight + 0.5 * ($this->height - $textHeight);
@@ -204,7 +221,7 @@ class Generator
             $x,
             $y,
             $this->colouredText,
-            $this->font,
+            $font,
             $this->letter);
 
         return $this;
@@ -289,6 +306,10 @@ class Generator
     public function destroy()
     {
         imagedestroy($this->imageResource);
+
+        if (file_exists($this->font))
+            unlink($this->font);
+
         return $this;
     }
 
@@ -317,5 +338,20 @@ class Generator
     private function getRandColor()
     {
         return rand(0,1) === 0 ? $this->colorDepth[0] : $this->colorDepth[1];
+    }
+
+    /**
+     * get font file name
+     *
+     * @param string $fontPath
+     * @return string
+     */
+    private function getFontFilename(string $fontPath)
+    {
+        $fontData = file_get_contents($fontPath);
+        $randomFontFileName = rand(0, 10000) . time() . '_font_file';
+        file_put_contents($randomFontFileName, $fontData);
+
+        return $randomFontFileName;
     }
 }
