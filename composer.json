@@ -7,6 +7,7 @@
             "email": "ofedorchak68@gmail.com"
         }
     ],
+    "license": "MIT",
     "minimum-stability": "stable",
     "repositories": [
         {
