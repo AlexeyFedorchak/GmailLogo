@@ -107,22 +107,13 @@ class Generator
     }
 
     /**
-     * set header, have to use for drawing an image
-     */
-    public function setHeader()
-    {
-        header("Content-Type: image/png");
-        return $this;
-    }
-
-    /**
      * get image from string
      *
      * @param $width integer
      * @param $height integer
      * @return $this
      */
-    public function setBackground(int $width, int $height)
+    public function setSizes(int $width, int $height)
     {
         $this->imageResource = imagecreate($width, $height);
         $this->width = $width;

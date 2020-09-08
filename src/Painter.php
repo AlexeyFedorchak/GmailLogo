@@ -25,8 +25,8 @@ class Painter
     {
         $temporaryLogo = new Generator('John Doe', [75, 175], Font::ROBOTO_REGULAR);
 
-        return $temporaryLogo->setHeader()
-            ->setBackground(300,300)
+        return $temporaryLogo
+            ->setSizes(300,300)
             ->setRandomBackgroundColor()
             ->setTextColor(255,255,255)
             ->setTextSize(110)
