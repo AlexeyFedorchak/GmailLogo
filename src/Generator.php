@@ -1,8 +1,6 @@
 <?php
-namespace OleksiiFedorchak\Gmail;
 
-use App\User;
-use Illuminate\Support\Facades\Storage;
+namespace GmailLogo;
 
 /**
  * custom utilities for generating gmail logo
@@ -10,15 +8,8 @@ use Illuminate\Support\Facades\Storage;
  * Class LogoGmail
  * @package App
  */
-class GmailLogo
+class Generator
 {
-    /**
-     * user email, will be used for making new logo
-     *
-     * @var string
-     */
-    protected $user;
-
     /**
      * handler of an image
      *
@@ -76,13 +67,6 @@ class GmailLogo
     protected $letter;
 
     /**
-     * string using to determine if user has temporary icon from gmail
-     *
-     * @var string
-     */
-    protected $sign = 'CustomGmailTemporaryIcon';
-
-    /**
      * width of the image
      *
      * @var int
@@ -104,53 +88,19 @@ class GmailLogo
     protected $colorStack = null;
 
     /**
-    * Public path for fonts. 
-    * The font should be put into public Laravel folder
-    */
-    protected $fontPath = 'fonts/roboto/RobotoRegular.ttf';
-
-    /**
-    * path to folder which contains images
-    */
-    protected $folderImagesPath = 'profile';
-
-    /**
-    * The attribute name of user model. 
-    * The attribute should be fillable property of User laravel model.
-    * Contains path to user logo in storage laravel folder. 
-    * The storage should be linked to public folder
-    * This param is not optional.
-    */
-    protected $userModelImagePathAttribute = 'logo';
-
-    /**
-    * The attribute contains stabel logo color. 
-    * Sometimes it is necessary to update only text, but not color.
-    * This attribute should be a fillable property fo Larevel model. If such doesn't exist, the images will 
-    * not have stable color.
-    * This attribute is optional
-    */
-    protected $userModelStableColorAttribute = 'logo_color';
-
-    /**
      * init class | make initial settings
      *
      * LogoGmail constructor.
-     * @param \App\User $user
+     * @param string $nameOrEmail
      * @param array $colorDepth
      */
-    public function __construct(User $user, array $colorDepth)
+    public function __construct(string $nameOrEmail, array $colorDepth, string $fontPath)
     {
-        $this->user = $user;
-        $this->logoName = 
-        	$folderImagesPath 
-        	. DIRECTORY_SEPARATOR 
-        	. $this->sign 
-        	. md5(uniqid($this->user->email));
+        $this->logoName = md5(uniqid($nameOrEmail));
 
         $this->colorDepth = $colorDepth;
-        $this->font = public_path($this->fontPath);
-        $this->setLetter();
+        $this->font = $fontPath;
+        $this->letter = $nameOrEmail;
     }
 
     /**
@@ -169,7 +119,7 @@ class GmailLogo
      * @param $height integer
      * @return $this
      */
-    public function setBackground($width, $height)
+    public function setBackground(int $width, int $height)
     {
         $this->imageResource = imagecreate($width, $height);
         $this->width = $width;
@@ -211,28 +161,6 @@ class GmailLogo
     }
 
     /**
-     * set default user background if such exists
-     *
-     * @return LogoGmail
-     */
-    public function setUserDefaultBackground()
-    {
-    	$logoStableColor = $this->userModelStableColorAttribute;
-
-        if (exists($this->user->$logoStableColor) 
-        	&& !is_null($this->user->$logoStableColor)) {
-            $color = explode('|', $this->user->logo_color);
-            $red = $color[0] ?? $this->getRandColor();
-            $green = $color[1] ?? $this->getRandColor();
-            $blue = $color[2] ?? $this->getRandColor();
-
-            return $this->setBackgroundColor($red, $green, $blue);
-        }
-
-        return $this->setRandomBackgroundColor();
-    }
-
-    /**
      * returns coloured text
      *
      * @param $red integer (0...255)
@@ -240,7 +168,7 @@ class GmailLogo
      * @param $blue integer (0...255)
      * @return $this
      */
-    public function setTextColor($red, $green, $blue)
+    public function setTextColor(int $red, int $green, int $blue)
     {
         if ($this->needsInvertTextColor) {
             $red = $this->colorDepth[0];
@@ -257,11 +185,9 @@ class GmailLogo
      *
      * @param $size int
      * @param $angle int
-     * @param $x int
-     * @param $y int
      * @return $this
      */
-    public function useText(int $size, int $angle = 0, int $x = 0, int $y = 0)
+    public function setTextSize(int $size, int $angle = 0)
     {
     	//centering text
         $bbox = imagettfbbox($size, 0, $this->font, $this->letter);
@@ -285,18 +211,6 @@ class GmailLogo
     }
 
     /**
-     * set new text for image
-     *
-     * @param string $string
-     * @return $this
-     */
-    public function presetText(string $string)
-    {
-        $this->letter = $string;
-        return $this;
-    }
-
-    /**
      * create an image, header should be set before printing the image
      *
      * @return $this
@@ -304,9 +218,11 @@ class GmailLogo
     public function createPNG()
     {
         $this->logoName .= '.png';
+
         $this->initBuffer();
         imagepng($this->imageResource);
         $this->getBufferAndClean();
+
         return $this;
     }
 
@@ -318,9 +234,11 @@ class GmailLogo
     public function createJPEG()
     {
         $this->logoName .= '.jpeg';
+
         $this->initBuffer();
         imagejpeg($this->imageResource);
         $this->getBufferAndClean();
+
         return $this;
     }
 
@@ -349,29 +267,16 @@ class GmailLogo
     /**
      * get buffer and save to file
      *
+     * @param string $path
      * @return $this
      */
-    public function save()
+    public function save(string $path = '')
     {
-        $this->removePreviousTemporaryIcon();
-        $disk = Storage::disk('public');
+        $this->imagePath = $path . $this->logoName;
 
-        $disk->put(
-            $this->logoName, $this->imageContent
-        );
-
-        $logoAttributeName = $this->userModelImagePathAttribute;
-        $logoStableColor = $this->userModelStableColorAttribute;
-
-        $this->user->$logoAttributeName 
-        	= str_replace('storage' . DIRECTORY_SEPARATOR, '', $disk->url($this->logoName));
-
-        if (isset($this->user->$logoStableColor)) {
-        	$this->user->$logoStableColor 
-        		= !is_null($this->colorStack) ? $this->colorStack : $this->user->$logoStableColor;        	
-        }
-
-		$this->user->save();
+        $f = fopen($this->imagePath, 'w');
+        fwrite($f, $this->imageContent);
+        fclose($f);
 
         return $this;
     }
@@ -411,35 +316,5 @@ class GmailLogo
     private function getRandColor()
     {
         return rand(0,1) === 0 ? $this->colorDepth[0] : $this->colorDepth[1];
-    }
-
-    /**
-     * set letter for making new icon
-     */
-    private function setLetter()
-    {
-        if (isset($this->user->name) && !empty($this->user->name)) {
-            $this->letter = $this->user->name[0];
-        } else {
-            $this->letter = $this->user->email[0];
-        }
-    }
-
-    /**
-     * remove temporary icon before creating new
-     */
-    private function removePreviousTemporaryIcon()
-    {
-        $fileName = explode($this->folderImagesPath, $this->user->photo_url)[1] ?? null;
-            if (file_exists(
-            	'app' 
-            		. DIRECTORY_SEPARATOR 
-            		. 'public' 
-            		. DIRECTORY_SEPARATOR 
-            		. $this->folderImagesPath 
-            		. $fileName)
-            	&& !empty($fileName) 
-            	&& strpos($fileName, $this->sign) !== FALSE) 
-                unlink(storage_path('app/public/profiles' . $fileName));
     }
 }
