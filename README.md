@@ -56,4 +56,4 @@ Using this package you can do things like this:
 This will create typical gmail logo for John Doe :D
 
 This video will help you to understand how to use tha package:
-https://youtu.be/LcNiCNdjUZI
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/vt5fpE0bzSY)
