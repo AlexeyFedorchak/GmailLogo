@@ -54,3 +54,6 @@ Using this package you can do things like this:
             ->html();
 ```
 This will create typical gmail logo for John Doe :D
+
+This video will help you to understand how to use tha package:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LcNiCNdjUZI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
